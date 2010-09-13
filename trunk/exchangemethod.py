@@ -4,13 +4,13 @@
 Implements the exchange method as described in
 
 @article{Spaeth77,
-	Author = {Sp{\"a}th, Helmuth},
-	Journal = {European Journal of Operations Research},
-	Number = {1},
-	Pages = {23--31},
-	Title = {Computational Experiences with the Exchange Method},
-	Volume = {1},
-	Year = {1977}}
+  Author = {Sp{\"a}th, Helmuth},
+  Journal = {European Journal of Operations Research},
+  Number = {1},
+  Pages = {23--31},
+  Title = {Computational Experiences with the Exchange Method},
+  Volume = {1},
+  Year = {1977}}
 
 The class is ExchangeMethod. It requires a list (of words, or word-pos
 pairs --- anything hashable should do).  It randomly partitions that
@@ -21,12 +21,13 @@ provided.
 The default objective function is the one used by
 
 @inproceedings{HatzivassiloglouMcKeown97,
-	Author = {Hatzivassiloglou, Vasileios and McKeown, Kathleen R.},
-	Booktitle = {Proceedings of the 35th Annual Meeting of the ACL and the 8th Conference of the European Chapter of the ACL},
-	Pages = {174--181},
-	Publisher = {ACL},
-	Title = {Predicting the Semantic Orientation of Adjectives},
-	Year = {1997}}
+  Author = {Hatzivassiloglou, Vasileios and McKeown, Kathleen R.},
+  Booktitle = {Proceedings of the 35th Annual Meeting of the ACL
+              and the 8th Conference of the European Chapter of the ACL},
+  Pages = {174--181},
+  Publisher = {ACL},
+  Title = {Predicting the Semantic Orientation of Adjectives},
+  Year = {1997}}
 
 However, other objective functions can be supplied, with the keyword
 argument objective_function when building ExchangeMethod objects.  The
