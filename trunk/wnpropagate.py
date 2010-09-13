@@ -139,6 +139,8 @@ def wordnet_sense_propagate(synsets_list, iterations, remove_overlap=True, metho
             # names used only for book-keeping.
             new_vals[j] = dict_union(new_same, new_diff)
         if remove_overlap:
+            # This will be the pairwise intersection of all the sets
+            # propagated at this level.
             overlap = {}
             for j in xrange(len(new_vals)-1):
                 for k in xrange(j+1, len(new_vals)):
