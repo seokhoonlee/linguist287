@@ -72,16 +72,17 @@ This software is distributed under Eclipse Public License - v 1.0:
 ######################################################################
 
 import sys
-sys.path.append("~/lib/nltk") # For the Web version.
 try:
     import nltk.corpus
 except ImportError:
     sys.stderr.write("Couldn't find an NLTK installation. To get it: http://www.nltk.org/.\n")
     sys.exit(2)
 
-#WN_ROOT = "/Volumes/CHRIS/Documents/data/corpora/nltk_data/corpora/wordnet/"
-WN_ROOT = "/Volumes/CHRIS/Downloads/WordNet-2.0/dict/"
-
+WN_ROOT = "/Volumes/CHRIS/Documents/data/corpora/nltk_data/corpora/wordnet/"
+#WN_ROOT = "/Volumes/CHRIS/Documents/data/corpora/WordNet/WordNet-2.0/dict/"
+if not os.path.exists(WN_ROOT):
+    raise IOError("Couldn't find a WordNet dictionary at %s. Please change the valye of WN_ROOT." % WN_ROOT)
+    
 ######################################################################
 
 METHODS          = set(["also_sees", "similar_tos", "derivationally_related_forms", "pertainyms", "antonyms"])
