@@ -158,13 +158,11 @@ def graph_propagation(cm, vocab, positive, negative, iterations):
     """
     pol = {}    
     # Initialize a.
-    a = defaultdict(dict)
+    a = defaultdict(lambda : defaultdict(int))
     for w1, val_dict in cm.iteritems():
         for w2 in val_dict.iterkeys():
             if w1 == w2:
-                a[w1][w2] = 1.0
-            else:
-                a[w1][w2] = 0.0
+                a[w1][w2] = 1.0                    
     # Propagation.
     pol_positive, a = propagate(positive, cm, a, iterations)
     pol_negative, a = propagate(negative, cm, a, iterations)
@@ -184,15 +182,16 @@ def propagate(seedset, cm, a, iterations):
     Output
     pol -- dictionary mapping words to un-corrected polarity scores
     a -- the updated matrix
-    """
+    """      
     for w_i in seedset:
         f = {}
         f[w_i] = True
         for t in range(iterations):
-            for w_k in f.keys():
-                for w_j, val in cm[w_k].items():                                  
-                    a[w_i][w_j] = max([a[w_i][w_j], a[w_i][w_k] * cm[w_k][w_j]])
-                    f[w_j] = True
+            for w_k in cm.keys():
+                if w_k in f:
+                    for w_j, val in cm[w_k].items():
+                        a[w_i][w_j] = max([a[w_i][w_j], a[w_i][w_k] * cm[w_k][w_j]])
+                        f[w_j] = True
     # Score tally.
     pol = {}
     for w in vocab:
