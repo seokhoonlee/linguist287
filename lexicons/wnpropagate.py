@@ -71,6 +71,7 @@ This software is distributed under Eclipse Public License - v 1.0:
 
 ######################################################################
 
+import os
 import sys
 try:
     import nltk.corpus
@@ -81,7 +82,9 @@ except ImportError:
 WN_ROOT = "/Volumes/CHRIS/Documents/data/corpora/nltk_data/corpora/wordnet/"
 #WN_ROOT = "/Volumes/CHRIS/Documents/data/corpora/WordNet/WordNet-2.0/dict/"
 if not os.path.exists(WN_ROOT):
-    raise IOError("Couldn't find a WordNet dictionary at %s. Please change the valye of WN_ROOT." % WN_ROOT)
+    raise IOError("Couldn't find a WordNet dictionary at %s. \
+    Please change the value of the variable WN_ROOT to point to the \
+    dict subdirectory of your copy of WordNet." % WN_ROOT)
     
 ######################################################################
 

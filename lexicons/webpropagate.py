@@ -4,8 +4,10 @@
 This is a demonstration of the sentiment propagation algorithm of
 
 @inproceedings{Velikovich-etal10,
-  Author = {Velikovich, Leonid and Blair-Goldensohn, Sasha and Hannan, Kerry and McDonald, Ryan},
-  Booktitle = {Proceedings of {N}orth {A}merican {A}ssociation for {C}omputational {L}inguistics 2010},
+  Author = {Velikovich, Leonid and Blair-Goldensohn, Sasha and
+            Hannan, Kerry and McDonald, Ryan},
+  Booktitle = {Proceedings of {N}orth {A}merican {A}ssociation
+               for {C}omputational {L}inguistics 2010},
   Title = {The Viability of Web-Derived Polarity Lexicons},
   Year = {2010}}
 
@@ -19,11 +21,10 @@ using a tiny artificial corpus.  The steps it takes:
 
 See the bottom of the file for the code that handles all this.
 
-At present, the algorithm is not optimized.  Steps 1-2 would need to
-be improved in order to work with large corpora. In particular, the
-co-occurrence matrix stores a lot of redundant information and, in
-turn, the cosine matrix contains a lot of duplicate cosine simolarity
-values.
+In a gesture at optimization, the co-occurrence matrix stores only one
+of the triagular matrices, and similarly for the mapping from words to
+vectors.  More could be done, though, especialy with the cosine matrix
+itself.
 
 For more on the nature of the algorithm, see the 'Sentiment lexicons'
 handout from Linguist 287 / CS 424P: Extracting Social Meaning and
@@ -46,7 +47,8 @@ except:
 ######################################################################
 
 def cooccurrence_matrix(corpus):
-    """Create the co-occurrence matrix.
+    """
+    Create the co-occurrence matrix.
 
     Input
     corpus (tuple of tuples) -- tokenized texts
@@ -60,7 +62,6 @@ def cooccurrence_matrix(corpus):
             for j in xrange(i+1, len(text)):
                 w1, w2 = sorted([text[i], text[j]])                
                 d[w1][w2] += 1
-                d[w2][w1] += 1
     return d
                             
 ######################################################################
@@ -88,7 +89,8 @@ def get_sorted_vocab(d):
 ######################################################################
 
 def cosine_similarity_matrix(vocab, d):
-    """Create the cosine similarity matrix.
+    """
+    Create the cosine similarity matrix.
 
     Input
     vocab -- a list of words derived from the keys of d
@@ -120,11 +122,12 @@ def get_vectors(d, vocab):
     vecs -- dictionary mapping words to their vectors.
     """    
     vecs = {}
-    for w in vocab:
+    for w1 in vocab:
         v = []
-        for w_prime in vocab:
-            v.append(d[w][w_prime])
-        vecs[w] = array(v)
+        for w2 in vocab:
+            wA, wB = sorted([w1, w2])
+            v.append(d[wA][wB])
+        vecs[w1] = array(v)
     return vecs
 
 def cosim(v1, v2):
@@ -214,6 +217,7 @@ def format_matrix(vocab, m):
     return s
 
 ######################################################################
+# DEMO
 
 if __name__ == "__main__":
 
