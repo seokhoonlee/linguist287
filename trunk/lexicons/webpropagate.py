@@ -35,7 +35,8 @@ Sentiment, Stanford, Fall 2010.
 
 import sys
 if sys.version_info < (2, 5) or sys.version_info >= (2, 7):
-    print "This program requires a version of Python between 2.5 and 2.6.*. You're running version %s.%s.%s" % sys.version_info[0:3]
+    print "This program requires a version of Python between 2.5 and 2.6.*. \
+    You're running version %s.%s.%s" % sys.version_info[0:3]
     sys.exit(2)
 from collections import defaultdict
 from operator import itemgetter
