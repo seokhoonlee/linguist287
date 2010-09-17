@@ -164,18 +164,22 @@ def graph_propagation(cm, vocab, positive, negative, iterations):
             if w1 == w2:
                 a[w1][w2] = 1.0                    
     # Propagation.
-    pol_positive, a = propagate(positive, cm, a, iterations)
-    pol_negative, a = propagate(negative, cm, a, iterations)
+    pol_positive, a = propagate(positive, cm, vocab, a, iterations)
+    pol_negative, a = propagate(negative, cm, vocab, a, iterations)
     beta = sum(pol_positive.values()) / sum(pol_negative.values())
     for w in vocab:
         pol[w] = pol_positive[w] - (beta * pol_negative[w])
     return pol
 
-def propagate(seedset, cm, a, iterations):
+def propagate(seedset, cm, vocab, a, iterations):
     """
+    Propagates the initial seedset, with the cosine measures
+    determining strength.
+    
     Input
     seedset -- list of strings.
     cm -- cosine similarity matrix
+    vocab -- the sorted vocabulary
     a -- the new value matrix
     iterations -- the number of iteration to perform
 
@@ -190,6 +194,8 @@ def propagate(seedset, cm, a, iterations):
             for w_k in cm.keys():
                 if w_k in f:
                     for w_j, val in cm[w_k].items():
+                        # New value is max{ old-value, cos(k, j) } --- so strength
+                        # can come from somewhere other th
                         a[w_i][w_j] = max([a[w_i][w_j], a[w_i][w_k] * cm[w_k][w_j]])
                         f[w_j] = True
     # Score tally.
