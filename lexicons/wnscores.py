@@ -94,7 +94,7 @@ class ParallelWnScorePropagator:
         positive (list) -- the positive seed set
         negative (list) -- the negative seed set
         neutral (list)  -- the neutral seed set
-        pos (str) -- WodNet pos value: a, v, r, n
+        pos (str) -- WordNet pos value: a, v, r, n
         
         Keyword argument
         weight (float) -- the biasing weight used by the algorithm (default: 0.2)
