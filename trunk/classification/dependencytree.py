@@ -12,7 +12,7 @@ handout for Linguist 287, Stanford, Fall 2010.
 
 Right now, the code implements two kinds of scope-marking:
 monotonicity and veridicality.  It is set up so that it is fairly
-straightfoward to accommodate new relations, by adding a marking
+straightforward to accommodate new relations, by adding a marking
 method to Tree and expanding the values of the scope_marking attribute
 of Node.
 
@@ -68,16 +68,76 @@ VERIDICAL = ""
 DOWNARD_MORPHEMES = ("not", "never", "nothing", "no", "n't", "nowhere", "none", "few", "seldom", "rarely")
 
 # This listing approximates the semantic property of nonveridicality.
-NONVERIDICAL_MORPHEMES = ("appear",  "appears", "appeared", "appearing",
-                          "argue",   "argues", "argued", "arguing",
-                          "believe", "believed", "believes", "believing",
-                          "claim",   "claims", "claimed", "claiming",
-                          "doubt",   "dounts", "doubted", "doubting",
-                          "predict", "predicts", "predicted", "predicting",
-                          "say",     "said", "says", "saying"
-                          "seem",    "seems", "seemed", "seeming",
-                          "shout",   "shouts", "shouted", "shouting",
-                          "think",   "thinks", "thought", "thinking",
+NONVERIDICAL_MORPHEMES = ('accept', 'accepts', 'accepted', 'accepting',
+                          'advertise', 'advertises', 'advertised', 'advertising',
+                          'advocate', 'advocates', 'advocated', 'advocating',
+                          'affirm', 'affirms', 'affirmed', 'affirming',
+                          'agree', 'agrees', 'agreed', 'agreeing',
+                          'allege', 'alleges', 'alleged', 'alleging',
+                          'allow', 'allows', 'allowed', 'allowing',
+                          'annoy', 'annoys', 'annoyed', 'annoying',
+                          'appear', 'appears', 'appeared', 'appearing', 
+                          'argue', 'argues', 'argued', 'arguing',
+                          'ask', 'asks', 'asked', 'asking',
+                          'assert', 'asserts', 'asserted', 'asserting',
+                          'assume', 'assumes', 'assumed', 'assuming',
+                          'assure', 'assures', 'assured', 'assuring',
+                          'believe', 'believes', 'believed', 'believing',
+                          'boast', 'boasts', 'boasted', 'boasting',
+                          'calculate', 'calculates', 'calculated', 'calculating',
+                          'claim', 'claims', 'claimed', 'claiming',
+                          'comment', 'comments', 'commented', 'commenting',
+                          'concern', 'concerns', 'concerned', 'concerning',
+                          'confided', 'confides', 'confided', 'confiding',
+                          'conjecture', 'conjectures', 'conjectured', 'conjecturing',
+                          'consider', 'considers', 'considered', 'considering',
+                          'contemplate', 'contemplates', 'contemplated', 'contemplating', 
+                          'decided', 'decides', 'decided', 'deciding',
+                          'declare', 'declares', 'declared', 'declaring',
+                          'deduce', 'deduces', 'deduced', 'deducing',
+                          'deem', 'deems', 'deemed', 'deeming',
+                          'demand', 'demands', 'demanded', 'demanding',
+                          'desire', 'desires', 'desired', 'desiring',
+                          'determine', 'determines', 'determined', 'determining',
+                          'doubt', 'doubts', 'doubted', 'doubting',
+                          'exclaim', 'exclaims', 'exclaimed', 'exclaiming',
+                          'expected', 'expects', 'expected', 'expecting',
+                          'fantasize', 'fantasizes', 'fantasized', 'fantasizing',
+                          'fear', 'fears', 'feared', 'fearing',
+                          'feel', 'feels', 'felt', 'feeling',
+                          'grumble', 'grumbles', 'grumbled', 'grumbling',
+                          'guess', 'guesses', 'guessed', 'guessing',
+                          'hear', 'hears', 'heard', 'hearing',
+                          'hope', 'hopes', 'hoped', 'hoping',
+                          'imply', 'implies', 'implied', 'implying',
+                          'imagine', 'imagines', 'imagined', 'imagining',
+                          'infer', 'infers', 'inferred', 'inferring',
+                          'insinuate', 'insinuates', 'insinuated', 'insinuating',
+                          'maintain', 'maintains', 'maintained', 'maintaining',
+                          'mumble', 'mumbles', 'mumbled', 'mumbling',
+                          'opine', 'opines', 'opined', 'opining',
+                          'pledge', 'pledges', 'pledged', 'pledging',
+                          'pray', 'prays', 'prayed', 'praying',
+                          'predict', 'predicts', 'predicted', 'predicting',
+                          'presume', 'presumes', 'presumed', 'presuming',
+                          'pretend', 'pretends', 'pretended', 'pretending',
+                          'proclaim', 'proclaims', 'proclaimed', 'proclaiming',
+                          'pronounce', 'pronounces', 'pronounced', 'pronouncing',
+                          'propose', 'proposes', 'proposed', 'proposing',
+                          'question', 'questions', 'questioned', 'questioning',
+                          'reckon', 'reckons', 'reckoned', 'reckoning',
+                          'recommend', 'recommends', 'recommended', 'recommending',
+                          'report', 'reports', 'reported', 'reporting',
+                          'respond', 'responds', 'responded', 'responding',
+                          'say', 'says', 'said', 'saying',
+                          'seem', 'seems', 'seemed', 'seeming',
+                          'shout', 'shouts', 'shouted', 'shouting',
+                          'suspect', 'suspects', 'suspected', 'suspecting',
+                          'think', 'thinks', 'thought', 'thinking',
+                          'tell', 'tells', 'told', 'telling',
+                          'want', 'wants', 'wanted', 'wanting',
+                          'wish', 'wishes', 'wished', 'wishing',
+                          'wonder', 'wonders', 'wondered', 'wondering'
                           )
 
 # This tuple approximates the semantic property of non-veridicality.
@@ -177,7 +237,8 @@ class Tree:
         if n.scope_markings[VERIDICALITY] == NONVERIDICAL:
             dd.append(n)
         for daught in self.daughters(n):
-            if daught.scope_markings[VERIDICALITY] == NONVERIDICAL:
+            # The first conjunct ensures veridicality. The second helps limit to the syntactic environments we want.
+            if daught.scope_markings[VERIDICALITY] == NONVERIDICAL and self.get_edge(n, daught).rel in ("xcomp", "ccomp", "pcomp"):
                 dd.append(daught)
         return dd
     
