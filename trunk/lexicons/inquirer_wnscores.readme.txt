@@ -1,0 +1,20 @@
+The file inquirer_wnscores.csv was created using the algorithm of
+
+@inproceedings{Blair-Goldensohn-etal08,
+  Address = {Beijing, China},
+  Author = {Blair-Goldensohn, Sasha and Hannan, Kerry and McDonald,
+  Ryan and Neylon, Tyler and Reis, George A. and Reynar, Jeff},
+  Booktitle = {{WWW} Workshop on {NLP} in the Information Explosion Era (NLPIX)},
+  Title = {Building a Sentiment Summarizer for Local Service Reviews},
+  Year = {2008}}
+
+with the Harvard Inquirer words as its seeds (Positiv, Negativ, and
+unmarked for those categories), but limiting attention to the (word,
+tag) pairs from that database that are also in WordNet.
+
+For additional details on the mapping from Inquirer Tags to WordNet
+tags, as well as an overview of the Blair-Goldensohn et al.
+algorithm, see the 'Sentiment lexicons' handout from Linguist 287 / CS
+424P: Extracting Social Meaning and Sentiment, Stanford, Fall 2010.
+
+---Chris Potts, 2010-10-04
