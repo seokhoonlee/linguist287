@@ -17,7 +17,7 @@ method to Tree and expanding the values of the scope_marking attribute
 of Node.
 
 If called from the command-line (via the main method), this program
-will try to parse and scope-mark a command line argument.  If none is
+will try to parse and scope-mark a command-line argument.  If none is
 given, it randomly selects from a small list of parse strings and
 returns the marked-up version of that.
 
@@ -56,7 +56,7 @@ VERIDICALITY = "veridicality"
 MONOTONICITY = "monotonicity"
 
 # Indicates that a node is in the scope of a downward entailing operator.
-DOWNARD = "_NPOL"
+DOWNWARD = "NPOL"
 # No marking for nodes in upward entailing environments (the default).
 UPWARD = ""
 # Indicates that a node is in an non-veridical environment.
@@ -65,7 +65,7 @@ NONVERIDICAL = "_NONVER"
 VERIDICAL = ""
 
 # This listing approximates the semantic property of downward entailingness.
-DOWNARD_MORPHEMES = ("not", "never", "nothing", "no", "n't", "nowhere", "none", "few", "seldom", "rarely")
+DOWNWARD_MORPHEMES = ("not", "never", "nothing", "no", "n't", "nowhere", "none", "few", "seldom", "rarely")
 
 # This listing approximates the semantic property of nonveridicality.
 NONVERIDICAL_MORPHEMES = ('accept', 'accepts', 'accepted', 'accepting',
@@ -178,7 +178,7 @@ class Tree:
         Propagates upward and downard entailingness around the tree,
         marking each node for this property.       
         """
-        self.scope_marking(DOWNARD, self.downward_spread)
+        self.scope_marking(DOWNWARD, self.downward_spread)
 
     def veridicality_marking(self):
         """
@@ -216,18 +216,18 @@ class Tree:
         Returns the set of daughters of Node n that are downward
         entailing.  The two ways this can happen: (i) the daughter
         itself is marked as DOWNWARD and (ii) the daughter has a
-        determiner daughter that is DOWNARD.
+        determiner daughter that is DOWNWARD.
         """
         dd = []
-        if n.scope_markings[MONOTONICITY] == DOWNARD:
+        if n.scope_markings[MONOTONICITY] == DOWNWARD:
             dd.append(n)
         for daught in self.daughters(n):
-            if daught.scope_markings[MONOTONICITY] == DOWNARD:
+            if daught.scope_markings[MONOTONICITY] == DOWNWARD:
                 dd.append(daught)
             else:
                 # This spreads to determiner relations, allowing them to exter their semantic influence.
                 for grand_daught in self.daughters(daught):
-                    if self.get_edge(daught, grand_daught).rel in ("det", "amod") and grand_daught.scope_markings[MONOTONICITY] == DOWNARD:
+                    if self.get_edge(daught, grand_daught).rel in ("det", "amod") and grand_daught.scope_markings[MONOTONICITY] == DOWNWARD:
                         dd.append(daught)
         return dd
 
@@ -292,10 +292,20 @@ class Tree:
         """
         nodes = {}        
         for e in self.edges:
-            nodes[str(e.from_node)] = e.from_node
-            nodes[str(e.to_node)] = e.to_node
+            nodes[unicode(e.from_node)] = e.from_node
+            nodes[unicode(e.to_node)] = e.to_node
         return sorted(nodes.values(), cmp=((lambda x, y : cmp(x.index, y.index))))
 
+    def nodes_by_index(self):
+        """
+        Returns a dict from node position indices to Node objects.
+        """
+        nodes = {}        
+        for e in self.edges:
+            nodes[e.from_node.index] = e.from_node
+            nodes[e.to_node.index] = e.to_node
+        return nodes
+        
     def __str__(self):
         """String of nodes, one per line."""
         return "\n".join(map(str, self.edges))
@@ -373,8 +383,8 @@ class Node:
             self.index = int(index)
         # Lexical values for the scope-marking properties.
         self.scope_markings = {}
-        if self.word in DOWNARD_MORPHEMES:
-            self.scope_markings[MONOTONICITY] = DOWNARD
+        if self.word in DOWNWARD_MORPHEMES:
+            self.scope_markings[MONOTONICITY] = DOWNWARD
         else:
             self.scope_markings[MONOTONICITY] = UPWARD
         if self.word in NONVERIDICAL_MORPHEMES:
@@ -388,7 +398,7 @@ class Node:
         sure that we make the appropriate change to the current
         values.
         """        
-        if marking in (UPWARD, DOWNARD):
+        if marking in (UPWARD, DOWNWARD):
             self.scope_markings[MONOTONICITY] = marking
         elif marking in (VERIDICAL, NONVERIDICAL):
             self.scope_markings[VERIDICALITY] = marking
@@ -414,7 +424,7 @@ class Node:
         pol_mark = ""
         ver_mark = ""
         if polarity:
-            pol_mark = "_" +  self.polarity
+            pol_mark = "_" + self.polarity
         if veridicality:
             ver_mark = "_" + self.veridicality            
         return "%s%s%s-%s" % (self.word, pol_mark, ver_mark, self.index)
@@ -428,7 +438,7 @@ class Node:
         style ="unfilled"
         shape = "oval"
         fontcolor = "black"
-        if self.scope_markings[MONOTONICITY] == DOWNARD:
+        if self.scope_markings[MONOTONICITY] == DOWNWARD:
             style = "filled"
             fontcolor = "white"
         if self.scope_markings[VERIDICALITY] == NONVERIDICAL:
