@@ -1,0 +1,1 @@
+Code for Stanford's Linguist 287/CS424P, Fall 2010
